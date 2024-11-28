@@ -1,4 +1,4 @@
-# React + Firebase Hotel Booking App
+# React Native + MongoDb + Express App
 
 React hotel booking/management app using firebase as storage and database.
 
