@@ -1,0 +1,31 @@
+#Recipe App
+
+Problem: Create recipe app that connects to an api.
+
+Requirements: 
+    Features:
+    Must be able to:
+    1. Add new item.
+    2. View already added items.
+    3. Update details of added items.
+    4. Delete added item.
+  
+
+
+Solution: 
+    Http requests
+
+    Functions:
+        1.addRecipe.
+        2.getRecipes.
+        3.getRecipeById.
+        4.updateRecipe.
+        5.deleteRecipe.
+
+    Screens:
+        1. SignIn.
+        2. Register.
+        3. Home.
+        4. Recipe.
+        5. Profile
+
