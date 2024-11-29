@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -8,6 +8,11 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 import CustomInput from "@/components/CustomInput";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import useFetch from "@/hooks/useFetch";
+import { Href, router } from "expo-router";
+
+type TokenType = string | null;
 type Props = {};
 type InputType =
   | string
@@ -22,7 +27,44 @@ const AddRecipe = (props: Props) => {
   const [servings, setServings] = useState<InputType>(0);
   const [imageUrl, setImageUrl] = useState<InputType>("");
 
-  const createRecipe = () => {};
+  const [recipes, getFetch] = useFetch();
+  const [token, setToken] = useState<TokenType>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const getData = async (key: string) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const jsonValue = await getData("token");
+      setLoading(false);
+      setToken(jsonValue);
+    })();
+  }, []);
+  const createRecipe = () => {
+    getFetch(`${url}/api/recipes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name,
+        ingredients,
+        instructions,
+        prepTime,
+        cookingTime,
+        servings,
+      }),
+    });
+    router.push("/(app)/(home)" as Href);
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <CustomInput name="Name" onChange={(text) => setName(text)} error={""} />
@@ -51,11 +93,11 @@ const AddRecipe = (props: Props) => {
         onChange={(text) => setServings(text)}
         error={""}
       />
-      <CustomInput
+      {/* <CustomInput
         name="Image"
         onChange={(text) => setImageUrl(text)}
         error={""}
-      />
+      /> */}
       <Pressable
         style={styles.button}
         onPress={() => {

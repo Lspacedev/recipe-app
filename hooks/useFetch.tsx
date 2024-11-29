@@ -12,14 +12,22 @@ type RecipeType = {
   imageUrl: string;
   createdAt: string;
 };
+type ResponseDataType = {
+  limit: number;
+  page: number;
+  recipes: Array<RecipeType>;
+  totalRecipes: number;
+};
 
-type RecipeResponse = Array<RecipeType> | RecipeType;
+type RecipeResponse = Array<RecipeType> | RecipeType | any;
 const useFetch = () => {
   const [state, setData] = useState<Array<RecipeType>>([]);
   const getFetch = async (link: string, options: RequestInit, id?: string) => {
     try {
       const res = await fetch(link, options);
-      const data: RecipeResponse = await res.json();
+      const data: RecipeResponse | ResponseDataType = await res.json();
+      console.log({ data });
+
       if (options.method === "DELETE") {
         setData((state) => {
           if (!state) return [];
@@ -40,7 +48,9 @@ const useFetch = () => {
           return [...state, data as RecipeType];
         });
       } else {
-        const arrayResponse: Array<RecipeType> = data as Array<RecipeType>;
+        const arrayResponse: Array<RecipeType> =
+          data.recipes as Array<RecipeType>;
+
         setData(arrayResponse);
       }
     } catch (error) {

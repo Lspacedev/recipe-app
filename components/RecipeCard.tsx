@@ -29,12 +29,17 @@ type RecipeProps = {
 const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
   return (
     <View>
-      <Image source={{ uri: recipe.imageUrl }} />
+      {/* <Image source={{ uri: recipe.imageUrl }} /> */}
       <View>
-        <Text></Text>
+        <Text>{recipe.name}</Text>
       </View>
       <View>
-        <Link href="/">
+        <Link
+          href={{
+            pathname: "./recipes/[id]",
+            params: { id: recipe._id },
+          }}
+        >
           <Pressable>
             <Text>View More</Text>
           </Pressable>
