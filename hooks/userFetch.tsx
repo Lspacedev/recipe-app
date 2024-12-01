@@ -14,9 +14,8 @@ const userFetch = () => {
   const getFetch = async (link: string, options: RequestInit, id?: string) => {
     try {
       const res = await fetch(link, options);
-
       const data: UserResponse = await res.json();
-      console.log({ res, data });
+
       return { status: res.ok, data };
       //   if (options.method === "DELETE") {
       //     setData((state) => {

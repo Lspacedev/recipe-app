@@ -63,6 +63,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: "#BDBDBD",
     borderWidth: 0.8,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
   },
   error: {
     color: "#B9382C",

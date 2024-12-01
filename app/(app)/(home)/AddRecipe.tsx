@@ -11,6 +11,7 @@ import CustomInput from "@/components/CustomInput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useFetch from "@/hooks/useFetch";
 import { Href, router } from "expo-router";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
 
 type TokenType = string | null;
 type Props = {};
@@ -67,6 +68,18 @@ const AddRecipe = (props: Props) => {
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text
+        onPress={() => {
+          router.push("/(app)/(home)" as Href);
+        }}
+        style={{
+          padding: 0,
+          margin: 0,
+          textAlign: "right",
+        }}
+      >
+        <EvilIcons name="close" size={24} color="black" />
+      </Text>
       <CustomInput name="Name" onChange={(text) => setName(text)} error={""} />
       <CustomInput
         name="Ingredients"

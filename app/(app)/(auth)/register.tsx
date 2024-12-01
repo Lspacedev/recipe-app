@@ -48,9 +48,9 @@ const Register = () => {
     if (res?.status) {
       router.push("/sign-in" as Href);
     } else {
-      const errors = res?.data.errors;
-      //console.log(data?.errors);
-      Alert.alert(errors.join(","));
+      //const errors = res?.data.errors;
+      console.log(res?.data);
+      // Alert.alert(errors.join(","));
     }
   };
 

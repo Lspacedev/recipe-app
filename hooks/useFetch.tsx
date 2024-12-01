@@ -25,8 +25,8 @@ const useFetch = () => {
   const getFetch = async (link: string, options: RequestInit, id?: string) => {
     try {
       const res = await fetch(link, options);
+      console.log({ res });
       const data: RecipeResponse | ResponseDataType = await res.json();
-      console.log({ data });
 
       if (options.method === "DELETE") {
         setData((state) => {
