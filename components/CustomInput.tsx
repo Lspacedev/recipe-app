@@ -32,11 +32,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
         onChangeText={(text) => onChange(text)}
         onBlur={onBlur}
       />
-      {error && typeof error === "string" && (
+      {typeof error === "string" && error !== "" && (
         <Text style={styles.error}>{error}</Text>
       )}
-      {error &&
-        typeof error === "object" &&
+      {typeof error === "object" &&
+        error.length > 0 &&
         error.map((error: string, i: number) => {
           return (
             <Text key={i} style={styles.error}>

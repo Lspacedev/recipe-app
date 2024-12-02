@@ -36,13 +36,11 @@ const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
       }}
     >
       <View style={styles.container}>
-        {/* <Image source={{ uri: recipe.imageUrl }} /> */}
+        <View style={styles.imgContainer}>
+          <Image source={{ uri: recipe.imageUrl }} style={styles.img} />
+        </View>
         <View style={styles.recipeText}>
-          <Text style={{ color: "whitesmoke" }}>{recipe.name}</Text>
-          <View style={{ flexDirection: "row", gap: 5 }}>
-            <Feather name="clock" size={24} color="whitesmoke" />
-            <Text style={{ color: "whitesmoke" }}>{recipe.cookingTime}</Text>
-          </View>
+          <Text style={{ color: "black" }}>{recipe.name}</Text>
         </View>
       </View>
     </Link>
@@ -55,14 +53,26 @@ const styles = StyleSheet.create({
     flex: 1,
     width: (Dimensions.get("window").width - 60) / 2,
     height: 200,
-    backgroundColor: "grey",
     borderRadius: 25,
     marginTop: 15,
+  },
+  imgContainer: {
+    width: (Dimensions.get("window").width - 60) / 2,
+    height: 180,
+    borderRadius: 25,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  img: {
+    flex: 1,
+    borderRadius: 25,
   },
   recipeText: {
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-end",
-    marginBottom: 10,
+    fontWeight: 600,
   },
 });

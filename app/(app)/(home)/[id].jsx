@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Image,
+  ImageBackground,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   Modal,
@@ -22,6 +22,9 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+import Feather from "@expo/vector-icons/Feather";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Entypo from "@expo/vector-icons/Entypo";
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const [recipe, getRecipeById] = useGet();
@@ -74,8 +77,16 @@ export default function DetailsScreen() {
     });
   };
   useEffect(() => {
+    if (JSON.stringify(recipe) === "{}") {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [recipe]);
+  useEffect(() => {
     getRecipe();
-  }, []);
+  }, [id]);
+
   const updateRecipe = async () => {
     const jsonValue = await getData("token");
 
@@ -118,23 +129,17 @@ export default function DetailsScreen() {
     setOpenMenu(false);
     router.push("/");
   };
+  if (loading)
+    return (
+      <View
+        style={{ flex: 1, alignContent: "center", justifyContent: "center" }}
+      >
+        <ActivityIndicator size="large" color="#2E4057" />
+      </View>
+    );
+
   return (
     <View style={styles.container}>
-      <View style={styles.nav}>
-        <Pressable
-          onPress={() => router.push("./", { relativeToDirectory: true })}
-        >
-          <AntDesign name="arrowleft" size={24} color="black" />{" "}
-        </Pressable>
-        <Pressable
-          style={styles.options}
-          onPress={() => {
-            setOpenMenu(true);
-          }}
-        >
-          <SimpleLineIcons name="options-vertical" size={24} color="black" />
-        </Pressable>
-      </View>
       <Modal
         style={styles.menuModal}
         animationType="fade"
@@ -177,24 +182,56 @@ export default function DetailsScreen() {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-      {edit && (
-        <Pressable
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 25,
-            alignSelf: "flex-end",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={() => setEdit(false)}
-        >
-          x
-        </Pressable>
-      )}
+
+      <ImageBackground
+        source={{ uri: recipe.imageUrl }}
+        resizeMode="cover"
+        style={styles.img}
+      >
+        <View style={styles.nav}>
+          <Pressable
+            style={styles.backArrow}
+            onPress={() => router.push("./", { relativeToDirectory: true })}
+          >
+            <AntDesign name="arrowleft" size={24} style={styles.arrowText} />
+          </Pressable>
+          <Pressable
+            style={styles.options}
+            onPress={() => {
+              setOpenMenu(true);
+            }}
+          >
+            <SimpleLineIcons name="options-vertical" size={24} color="black" />
+          </Pressable>
+        </View>
+      </ImageBackground>
       <View style={styles.details}>
+        {edit && (
+          <Pressable
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 25,
+              alignSelf: "flex-end",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => setEdit(false)}
+          >
+            <EvilIcons name="close" size={24} color="black" />
+          </Pressable>
+        )}
         {!edit ? (
-          <Text>{recipe && recipe.name}</Text>
+          <Text
+            style={{
+              color: "#2E4057",
+              fontSize: 30,
+              fontWeight: 600,
+              textAlign: "start",
+            }}
+          >
+            {recipe && recipe.name}
+          </Text>
         ) : (
           <CustomInput
             name={"Name"}
@@ -203,9 +240,81 @@ export default function DetailsScreen() {
             error=""
           />
         )}
+        <View
+          style={[!edit ? styles.timeContainer : { flexDirection: "column" }]}
+        >
+          {!edit ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Feather name="clock" size={24} color="black" />
+              <Text>{recipe && recipe.prepTime}</Text>
+            </View>
+          ) : (
+            <CustomInput
+              name={"PrepTime"}
+              onChange={setPrepTime}
+              //onBlur={() => handleInput("string", "userName", userName)}
+              error=""
+            />
+          )}
+
+          {!edit ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <MaterialCommunityIcons name="av-timer" size={24} color="black" />
+              <Text>{recipe && recipe.cookingTime}</Text>
+            </View>
+          ) : (
+            <CustomInput
+              name={"CookingTime"}
+              onChange={setCookingTime}
+              //onBlur={() => handleInput("string", "userName", userName)}
+              error=""
+            />
+          )}
+
+          {!edit ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Entypo name="bowl" size={24} color="black" />
+              <Text>{recipe && recipe.servings}</Text>
+            </View>
+          ) : (
+            <CustomInput
+              name={"Servings"}
+              onChange={setServings}
+              //onBlur={() => handleInput("string", "userName", userName)}
+              error=""
+            />
+          )}
+        </View>
         <View>
           {!edit ? (
-            <Text>{recipe && recipe.ingredients}</Text>
+            <View style={styles.infoContainer}>
+              <Text style={{ fontSize: 21, fontWeight: 600, color: "#121b27" }}>
+                {recipe && "Ingredients"}
+              </Text>
+
+              <Text>{recipe && recipe.ingredients}</Text>
+            </View>
           ) : (
             <CustomInput
               name={"Ingredients"}
@@ -217,7 +326,12 @@ export default function DetailsScreen() {
         </View>
         <View>
           {!edit ? (
-            <Text>{recipe && recipe.instructions}</Text>
+            <View style={styles.infoContainer}>
+              <Text style={{ fontSize: 21, fontWeight: 600, color: "#121b27" }}>
+                {recipe && "Instructions"}
+              </Text>
+              <Text>{recipe && recipe.instructions}</Text>
+            </View>
           ) : (
             <CustomInput
               name={"Instructions"}
@@ -227,42 +341,7 @@ export default function DetailsScreen() {
             />
           )}
         </View>
-        <View>
-          {!edit ? (
-            <Text>{recipe && recipe.prepTime}</Text>
-          ) : (
-            <CustomInput
-              name={"PrepTime"}
-              onChange={setPrepTime}
-              //onBlur={() => handleInput("string", "userName", userName)}
-              error=""
-            />
-          )}
-        </View>
-        <View>
-          {!edit ? (
-            <Text>{recipe && recipe.cookingTime}</Text>
-          ) : (
-            <CustomInput
-              name={"CookingTime"}
-              onChange={setCookingTime}
-              //onBlur={() => handleInput("string", "userName", userName)}
-              error=""
-            />
-          )}
-        </View>
-        <View>
-          {!edit ? (
-            <Text>{recipe && recipe.servings}</Text>
-          ) : (
-            <CustomInput
-              name={"Servings"}
-              onChange={setServings}
-              //onBlur={() => handleInput("string", "userName", userName)}
-              error=""
-            />
-          )}
-        </View>
+
         {edit && (
           <Pressable
             style={styles.button}
@@ -300,15 +379,42 @@ export default function DetailsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   nav: {
-    backgroundColor: "#2E4057",
+    backgroundColor: "transparent",
     padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
-  details: {
+  backArrow: {
+    color: "white",
+    backgroundColor: "black",
+    padding: 5,
+    borderRadius: "50%",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  arrowText: {
+    color: "whitesmoke",
+  },
+  imgContainer: {
     flex: 1,
-    alignItems: "center",
+  },
+  img: {
+    flex: 1,
+  },
+  details: {
+    marginTop: -25,
+    paddingTop: 15,
+    padding: 25,
+    flex: 2,
+    borderRadius: 35,
+    backgroundColor: "white",
+  },
+  timeContainer: {
+    marginVertical: 25,
+    flexDirection: "row",
+  },
+  infoContainer: {
+    marginVertical: 25,
   },
   button: {
     backgroundColor: "#C0D461",
@@ -323,14 +429,12 @@ const styles = StyleSheet.create({
   },
   menuModal: {
     flex: 1,
-
-    backgroundColor: "blue",
   },
   menu: {
     position: "absolute",
     right: 0,
     width: 200,
-    height: 150,
+    height: 100,
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,

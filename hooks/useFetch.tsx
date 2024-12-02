@@ -26,6 +26,7 @@ const useFetch = () => {
     try {
       const res = await fetch(link, options);
       console.log({ res });
+
       const data: RecipeResponse | ResponseDataType = await res.json();
 
       if (options.method === "DELETE") {

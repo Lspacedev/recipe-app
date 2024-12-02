@@ -102,7 +102,7 @@ export default function SignIn() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0C0910",
+    backgroundColor: "#385747",
     flex: 1,
     paddingHorizontal: 20,
   },
@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
   },
   button: {
-    backgroundColor: "#F7F0F0",
+    backgroundColor: "#C0D461",
     padding: 15,
     marginTop: 20,
     borderRadius: 5,
   },
   buttonText: {
-    color: "#0C0910",
+    color: "#010709",
     textAlign: "center",
     textTransform: "uppercase",
   },
