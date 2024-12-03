@@ -16,7 +16,8 @@ import EvilIcons from "@expo/vector-icons/EvilIcons";
 import * as ImagePicker from "expo-image-picker";
 import { Buffer } from "buffer";
 import parseJWT from "@/utils/checkToken";
-
+import Constants from "expo-constants";
+import { Platform } from "react-native";
 const FormData = global.FormData;
 // type TokenType = string | null;
 // type Props = {};
@@ -40,7 +41,10 @@ const AddRecipe = () => {
   const [recipes, getFetch] = useFetch();
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
-  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const url =
+    "http://" +
+    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
   const getData = async (key) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
@@ -61,8 +65,10 @@ const AddRecipe = () => {
     })();
   }, []);
   const createRecipe = async (uri) => {
-    const imageBuffer = Buffer.from(uri, "base64");
-    const imageBlob = new Blob([imageBuffer], { mimeType });
+    const uriParts = uri.split(".");
+    const fileType = uriParts[uriParts.length - 1];
+    // const imageBuffer = Buffer.from(uri, "base64");
+    // const imageBlob = new Blob([imageBuffer], { mimeType });
 
     const formData = new FormData();
     formData.append("name", name);
@@ -73,7 +79,11 @@ const AddRecipe = () => {
     formData.append("cookingTime", cookingTime);
     formData.append("servings", servings);
 
-    formData.append("image", imageBlob, filename);
+    formData.append("image", {
+      name: filename,
+      type: `image/${fileType}`,
+      uri: Platform.OS === "ios" ? uri.replace("file://", "") : uri,
+    });
 
     const res = await fetch(`${url}/api/recipes`, {
       method: "POST",
@@ -82,7 +92,7 @@ const AddRecipe = () => {
       },
       body: formData,
     });
-    // router.push("/(app)/(home)");
+    router.push("/(app)/(home)");
   };
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -93,12 +103,11 @@ const AddRecipe = () => {
       quality: 1,
       base64: true,
     });
-    console.log({ result });
 
     if (!result.canceled) {
       setFilename(result.assets[0].fileName);
       setMimeType(result.assets[0].mimeType);
-      setImage(result.assets[0].base64);
+      setImage(result.assets[0].uri);
     }
   };
   return (

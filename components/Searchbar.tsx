@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchProps> = ({ name, onChange }) => {
         name="search"
         size={24}
         color="grey"
-        style={{ position: "absolute", top: "20%", left: 10 }}
+        style={{ position: "absolute", top: 10, left: 10 }}
       />
     </View>
   );

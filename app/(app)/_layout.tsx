@@ -27,7 +27,6 @@ export default function Root() {
   if (loading) {
     return <Text>Loading...</Text>;
   }
-
   if (!token && !authRoutes.includes(pathname)) {
     return <Redirect href={{ pathname: "/sign-in" }} />;
   }

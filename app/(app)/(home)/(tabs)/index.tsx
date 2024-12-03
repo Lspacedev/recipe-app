@@ -18,6 +18,12 @@ import parseJWT from "@/utils/checkToken";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Constants from "expo-constants";
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+} from "@expo-google-fonts/poppins";
 type Props = {};
 type TokenType = string | null;
 type InputType = string | NativeSyntheticEvent<TextInputChangeEventData>;
@@ -36,14 +42,20 @@ type RecipeType = {
 };
 
 const Home = (props: Props) => {
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+  });
   const [recipes, getFetch] = useFetch();
   const [token, setToken] = useState<TokenType>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<InputType>("");
   const [searchResults, setSearchResults] = useState<Array<RecipeType>>([]);
 
-  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-
+  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const url =
+    "http://" +
+    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
   const getData = async (key: string) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
@@ -83,135 +95,143 @@ const Home = (props: Props) => {
       setSearchResults([]);
     }
   }, [searchText]);
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 25,
-        }}
-      >
-        <MaterialCommunityIcons
-          name="silverware-fork-knife"
-          size={24}
-          color="black"
-        />
-        <Text style={styles.logo}>CookBook</Text>
-      </View>
-      <View>
-        <Text style={styles.title}>Your Personal Cooking Book</Text>
-      </View>
-      <View style={styles.search}>
-        <Searchbar name="Find recipes" onChange={setSearchText} />
-      </View>
-      <View style={styles.categories}>
-        <Pressable
-          onPress={() => setSearchText("")}
+  if (!fontsLoaded) {
+    return <View></View>;
+  } else {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View
           style={{
-            height: 50,
-            width: 50,
-            borderRadius: 10,
-            justifyContent: "center",
+            flexDirection: "row",
             alignItems: "center",
-            shadowColor: "#bbb",
-            shadowOffset: { width: 2, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
-          }}
-        >
-          <Text style={{ fontSize: 15, fontWeight: 600, color: "#385747" }}>
-            All
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setSearchText("Breakfast")}
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 10,
             justifyContent: "center",
-            alignItems: "center",
-            shadowColor: "#bbb",
-            shadowOffset: { width: 2, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
-          }}
-        >
-          <MaterialCommunityIcons name="egg-fried" size={24} color="#385747" />
-          <Text style={styles.iconTitle}>Breakfast</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setSearchText("Lunch")}
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 10,
-            justifyContent: "center",
-            alignItems: "center",
-            shadowColor: "#bbb",
-            shadowOffset: { width: 2, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
-          }}
-        >
-          <Ionicons name="fast-food-outline" size={24} color="#385747" />
-          <Text style={styles.iconTitle}>Lunch</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setSearchText("Dinner")}
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 10,
-            justifyContent: "center",
-            alignItems: "center",
-            shadowColor: "#bbb",
-            shadowOffset: { width: 2, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
+            marginTop: 25,
           }}
         >
           <MaterialCommunityIcons
-            name="food-drumstick-outline"
+            name="silverware-fork-knife"
             size={24}
-            color="#385747"
+            color="black"
           />
-          <Text style={styles.iconTitle}>Dinner</Text>
-        </Pressable>
-      </View>
-      <View style={styles.recipes}>
-        {searchResults.length > 0 ? (
-          <FlatList
-            data={searchResults}
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-around" }}
-            renderItem={({ item }) => {
-              return <RecipeCard recipe={item} />;
+          <Text style={styles.logo}>CookBook</Text>
+        </View>
+        <View>
+          <Text style={styles.title}>Your Personal Cooking Book</Text>
+        </View>
+        <View style={styles.search}>
+          <Searchbar name="Find recipes" onChange={setSearchText} />
+        </View>
+        <View style={styles.categories}>
+          <Pressable
+            onPress={() => setSearchText("")}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#bbb",
+              shadowOffset: { width: 2, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
             }}
-          />
-        ) : recipes.length > 0 ? (
-          <FlatList
-            data={recipes}
-            numColumns={2}
-            columnWrapperStyle={{
-              gap: 10,
-              justifyContent: "space-around",
+          >
+            <Text style={{ fontSize: 15, fontWeight: 600, color: "#385747" }}>
+              All
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setSearchText("Breakfast")}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#bbb",
+              shadowOffset: { width: 2, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
             }}
-            renderItem={({ item }) => {
-              return <RecipeCard recipe={item} />;
+          >
+            <MaterialCommunityIcons
+              name="egg-fried"
+              size={24}
+              color="#385747"
+            />
+            <Text style={styles.iconTitle}>Breakfast</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setSearchText("Lunch")}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#bbb",
+              shadowOffset: { width: 2, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
             }}
-          />
-        ) : (
-          <Text style={{ textAlign: "center", color: "#385747" }}>
-            No recipes added
-          </Text>
-        )}
-      </View>
-      <FAB />
-    </SafeAreaView>
-  );
+          >
+            <Ionicons name="fast-food-outline" size={24} color="#385747" />
+            <Text style={styles.iconTitle}>Lunch</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setSearchText("Dinner")}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#bbb",
+              shadowOffset: { width: 2, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="food-drumstick-outline"
+              size={24}
+              color="#385747"
+            />
+            <Text style={styles.iconTitle}>Dinner</Text>
+          </Pressable>
+        </View>
+        <View style={styles.recipes}>
+          {searchResults.length > 0 ? (
+            <FlatList
+              data={searchResults}
+              numColumns={2}
+              columnWrapperStyle={{ justifyContent: "space-around" }}
+              renderItem={({ item }) => {
+                return <RecipeCard recipe={item} />;
+              }}
+            />
+          ) : recipes.length > 0 ? (
+            <FlatList
+              data={recipes}
+              numColumns={2}
+              columnWrapperStyle={{
+                gap: 10,
+                justifyContent: "space-around",
+              }}
+              renderItem={({ item }) => {
+                return <RecipeCard recipe={item} />;
+              }}
+            />
+          ) : (
+            <Text style={{ textAlign: "center", color: "#385747" }}>
+              No recipes added
+            </Text>
+          )}
+        </View>
+        <FAB />
+      </SafeAreaView>
+    );
+  }
 };
 export default Home;
 const styles = StyleSheet.create({
@@ -219,18 +239,17 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 15,
     fontWeight: "800",
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins_400Regular",
     textAlign: "center",
   },
   recipes: {
     flex: 1,
     marginHorizontal: 15,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins_400Regular",
   },
 
   categories: {
-    marginHorizontal: 15,
-    marginBottom: 15,
+    marginVertical: 50,
     flexDirection: "row",
     justifyContent: "space-evenly",
   },
@@ -238,7 +257,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     fontSize: 45,
     fontWeight: "bold",
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins_400Regular",
     textAlign: "center",
     color: "#213b2d",
   },

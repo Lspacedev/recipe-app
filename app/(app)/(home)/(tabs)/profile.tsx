@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import userFetch from "@/hooks/userFetch";
 import parseJWT from "@/utils/checkToken";
+import Constants from "expo-constants";
 
 type InputType =
   | string
@@ -38,7 +39,10 @@ export default function Profile() {
 
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const url =
+    "http://" +
+    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
   const getData = async (key: string) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
