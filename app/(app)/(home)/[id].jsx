@@ -1,6 +1,7 @@
 import { useLocalSearchParams, Link, router } from "expo-router";
 import {
   View,
+  ScrollView,
   Text,
   StyleSheet,
   Pressable,
@@ -139,7 +140,7 @@ export default function DetailsScreen() {
     );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Modal
         style={styles.menuModal}
         animationType="fade"
@@ -372,7 +373,7 @@ export default function DetailsScreen() {
           <AntDesign name="edit" size={24} color="black" />
         </Pressable>
       )}
-    </View>
+    </ScrollView>
   );
 }
 

@@ -56,7 +56,6 @@ const AddRecipe = () => {
   const createRecipe = async (uri) => {
     const imageBuffer = Buffer.from(uri, "base64");
     const imageBlob = new Blob([imageBuffer], { mimeType });
-    console.log({ imageBlob, uri });
 
     const formData = new FormData();
     formData.append("name", name);
