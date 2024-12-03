@@ -15,6 +15,8 @@ import { Href, router } from "expo-router";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import * as ImagePicker from "expo-image-picker";
 import { Buffer } from "buffer";
+import parseJWT from "@/utils/checkToken";
+
 const FormData = global.FormData;
 // type TokenType = string | null;
 // type Props = {};
@@ -29,6 +31,8 @@ const AddRecipe = () => {
   const [prepTime, setPrepTime] = useState(0);
   const [cookingTime, setCookingTime] = useState(0);
   const [servings, setServings] = useState(0);
+  const [category, setCategory] = useState("");
+
   const [image, setImage] = useState("");
   const [filename, setFilename] = useState("");
   const [mimeType, setMimeType] = useState("");
@@ -40,6 +44,7 @@ const AddRecipe = () => {
   const getData = async (key) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
+
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // error reading value
@@ -49,6 +54,8 @@ const AddRecipe = () => {
     (async () => {
       setLoading(true);
       const jsonValue = await getData("token");
+      parseJWT(jsonValue);
+
       setLoading(false);
       setToken(jsonValue);
     })();
@@ -61,6 +68,7 @@ const AddRecipe = () => {
     formData.append("name", name);
     formData.append("ingredients", ingredients);
     formData.append("instructions", instructions);
+    formData.append("category", category);
     formData.append("prepTime", prepTime);
     formData.append("cookingTime", cookingTime);
     formData.append("servings", servings);
@@ -116,6 +124,11 @@ const AddRecipe = () => {
       <CustomInput
         name="Instructions"
         onChange={(text) => setInstructions(text)}
+        error={""}
+      />
+      <CustomInput
+        name="Category"
+        onChange={(text) => setCategory(text)}
         error={""}
       />
       <CustomInput

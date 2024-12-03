@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CustomInput from "@/components/CustomInput";
 import userFetch from "@/hooks/userFetch";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type Props = {};
 type InputType =
@@ -56,6 +57,20 @@ const Register = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <MaterialCommunityIcons
+          name="silverware-fork-knife"
+          size={24}
+          color="black"
+        />
+        <Text style={styles.logo}>CookBook</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.formTitle}>Register</Text>
         <CustomInput
@@ -107,7 +122,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#385747",
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+  },
+  logo: {
+    fontSize: 20,
+    fontFamily: "Poppins-Regular",
+    textAlign: "center",
+    marginVertical: 35,
+    color: "white",
   },
   scrollView: {
     gap: 15,
@@ -115,8 +137,10 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     fontSize: 36,
+    fontFamily: "Poppins-Regular",
     marginVertical: 10,
     color: "#F7F0F0",
+    textAlign: "center",
   },
   inputContainer: {
     gap: 5,
@@ -139,9 +163,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: "#010709",
+    color: "#385747",
     textAlign: "center",
     textTransform: "uppercase",
+    fontWeight: "700",
   },
   signInSection: {
     flexDirection: "row",

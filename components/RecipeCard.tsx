@@ -31,7 +31,7 @@ const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
   return (
     <Link
       href={{
-        pathname: "./[id]",
+        pathname: "../[id]",
         params: { id: recipe._id },
       }}
     >
@@ -40,7 +40,7 @@ const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
           <Image source={{ uri: recipe.imageUrl }} style={styles.img} />
         </View>
         <View style={styles.recipeText}>
-          <Text style={{ color: "black" }}>{recipe.name}</Text>
+          <Text style={{ color: "#121b27" }}>{recipe.name}</Text>
         </View>
       </View>
     </Link>

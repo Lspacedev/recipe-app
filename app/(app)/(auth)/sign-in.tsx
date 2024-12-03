@@ -14,7 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import userFetch from "@/hooks/userFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 type InputType =
   | string
   | Number
@@ -50,8 +50,22 @@ export default function SignIn() {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <MaterialCommunityIcons
+          name="silverware-fork-knife"
+          size={24}
+          color="black"
+        />
+        <Text style={styles.logo}>CookBook</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text style={styles.formTitle}>Login</Text>
+        <Text style={styles.formTitle}>Sign in</Text>
         <CustomInput
           name={"Username"}
           onChange={(text) => {
@@ -104,16 +118,26 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#385747",
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+  },
+  logo: {
+    fontSize: 20,
+    fontFamily: "Poppins-Regular",
+    textAlign: "center",
+    marginVertical: 35,
+    color: "white",
   },
   scrollView: {
     gap: 15,
     paddingVertical: 20,
   },
+
   formTitle: {
     fontSize: 36,
+    fontFamily: "Poppins-Regular",
     marginVertical: 10,
     color: "#F7F0F0",
+    textAlign: "center",
   },
   inputContainer: {
     gap: 5,
@@ -136,8 +160,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: "#010709",
+    color: "#385747",
     textAlign: "center",
     textTransform: "uppercase",
+    fontWeight: "700",
   },
 });

@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchProps> = ({ name, onChange }) => {
         name="search"
         size={24}
         color="grey"
-        style={{ position: "absolute", top: "25%", left: 10 }}
+        style={{ position: "absolute", top: "20%", left: 10 }}
       />
     </View>
   );
@@ -39,10 +39,11 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     borderRadius: 25,
+    backgroundColor: "white",
   },
 
   input: {
-    height: 50,
+    height: 40,
     borderRadius: 25,
     borderColor: "#BDBDBD",
     textAlign: "center",

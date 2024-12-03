@@ -24,7 +24,6 @@ export default function Root() {
       setToken(jsonValue);
     })();
   }, []);
-
   if (loading) {
     return <Text>Loading...</Text>;
   }

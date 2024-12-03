@@ -8,6 +8,8 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 import React from "react";
+import { useState } from "react";
+
 type InputType = string | NativeSyntheticEvent<TextInputChangeEventData>;
 
 type CustomInputProps = TextInputProps & {
@@ -22,16 +24,29 @@ const CustomInput: React.FC<CustomInputProps> = ({
   error,
   onBlur,
 }) => {
+  const [showPassword, setShowPassword] = useState<Boolean>(false);
+
   return (
     <View style={styles.inputContainer}>
-      <Text style={styles.label}>{name}</Text>
-      <TextInput
-        style={[styles.input]}
-        placeholder={name}
-        placeholderTextColor={"#717171"}
-        onChangeText={(text) => onChange(text)}
-        onBlur={onBlur}
-      />
+      {name === "Password" || name === "Confirm Password" ? (
+        <TextInput
+          secureTextEntry={!showPassword}
+          style={[styles.input]}
+          placeholder={name}
+          placeholderTextColor={"#717171"}
+          onChangeText={(text) => onChange(text)}
+          onBlur={onBlur}
+        />
+      ) : (
+        <TextInput
+          style={[styles.input]}
+          placeholder={name}
+          placeholderTextColor={"#717171"}
+          onChangeText={(text) => onChange(text)}
+          onBlur={onBlur}
+        />
+      )}
+
       {typeof error === "string" && error !== "" && (
         <Text style={styles.error}>{error}</Text>
       )}

@@ -26,6 +26,8 @@ import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
+import parseJWT from "@/utils/checkToken";
+
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const [recipe, getRecipeById] = useGet();
@@ -33,6 +35,7 @@ export default function DetailsScreen() {
   const [name, setName] = useState();
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [category, setCategory] = useState("");
   const [prepTime, setPrepTime] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [servings, setServings] = useState("");
@@ -70,6 +73,8 @@ export default function DetailsScreen() {
   };
   const getRecipe = async () => {
     const jsonValue = await getData("token");
+    parseJWT(jsonValue);
+
     getRecipeById(`${url}/api/recipes/${id}`, {
       method: "GET",
       headers: {
@@ -90,6 +95,7 @@ export default function DetailsScreen() {
 
   const updateRecipe = async () => {
     const jsonValue = await getData("token");
+    parseJWT(jsonValue);
 
     getFetch(
       `${url}/api/recipes/${id}`,
@@ -103,6 +109,7 @@ export default function DetailsScreen() {
           name,
           ingredients,
           instructions,
+          category,
           prepTime,
           cookingTime,
           servings,
@@ -115,6 +122,7 @@ export default function DetailsScreen() {
   };
   const deleteRecipe = async () => {
     const jsonValue = await getData("token");
+    parseJWT(jsonValue);
 
     getFetch(
       `${url}/api/recipes/${id}`,
@@ -140,7 +148,7 @@ export default function DetailsScreen() {
     );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ flex: 1 }}>
       <Modal
         style={styles.menuModal}
         animationType="fade"
@@ -202,7 +210,17 @@ export default function DetailsScreen() {
               setOpenMenu(true);
             }}
           >
-            <SimpleLineIcons name="options-vertical" size={24} color="black" />
+            <SimpleLineIcons
+              name="options-vertical"
+              size={24}
+              style={{
+                color: "whitesmoke",
+                backgroundColor: "black",
+                padding: 5,
+                borderRadius: "50%",
+                backgroundColor: "rgba(0, 0, 0, 0.3)",
+              }}
+            />
           </Pressable>
         </View>
       </ImageBackground>
@@ -229,6 +247,7 @@ export default function DetailsScreen() {
               fontSize: 30,
               fontWeight: 600,
               textAlign: "start",
+              fontFamily: "Poppins-Regular",
             }}
           >
             {recipe && recipe.name}
@@ -253,8 +272,10 @@ export default function DetailsScreen() {
                 gap: 10,
               }}
             >
-              <Feather name="clock" size={24} color="black" />
-              <Text>{recipe && recipe.prepTime}</Text>
+              <Feather name="clock" size={24} style={styles.icon} />
+              <Text style={{ fontWeight: 500 }}>
+                {recipe && recipe.prepTime}
+              </Text>
             </View>
           ) : (
             <CustomInput
@@ -274,8 +295,14 @@ export default function DetailsScreen() {
                 gap: 10,
               }}
             >
-              <MaterialCommunityIcons name="av-timer" size={24} color="black" />
-              <Text>{recipe && recipe.cookingTime}</Text>
+              <MaterialCommunityIcons
+                name="av-timer"
+                size={24}
+                style={styles.icon}
+              />
+              <Text style={{ fontWeight: 500 }}>
+                {recipe && recipe.cookingTime}
+              </Text>
             </View>
           ) : (
             <CustomInput
@@ -295,13 +322,32 @@ export default function DetailsScreen() {
                 gap: 10,
               }}
             >
-              <Entypo name="bowl" size={24} color="black" />
-              <Text>{recipe && recipe.servings}</Text>
+              <Entypo name="bowl" size={24} style={styles.icon} />
+              <Text style={{ fontWeight: 500 }}>
+                {recipe && recipe.servings}
+              </Text>
             </View>
           ) : (
             <CustomInput
               name={"Servings"}
               onChange={setServings}
+              //onBlur={() => handleInput("string", "userName", userName)}
+              error=""
+            />
+          )}
+        </View>
+        <View>
+          {!edit ? (
+            <View style={styles.infoContainer}>
+              <Text style={{ fontSize: 21, fontWeight: 600, color: "#121b27" }}>
+                {recipe && "Category"}
+              </Text>
+              <Text>{recipe && recipe.category}</Text>
+            </View>
+          ) : (
+            <CustomInput
+              name={"Category"}
+              onChange={setCategory}
               //onBlur={() => handleInput("string", "userName", userName)}
               error=""
             />
@@ -378,7 +424,9 @@ export default function DetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {
+    backgroundColor: "orange",
+  },
   nav: {
     backgroundColor: "transparent",
     padding: 15,
@@ -396,26 +444,31 @@ const styles = StyleSheet.create({
   arrowText: {
     color: "whitesmoke",
   },
-  imgContainer: {
-    flex: 1,
-  },
-  img: {
-    flex: 1,
-  },
+  imgContainer: {},
+  img: { flex: 1 },
   details: {
-    marginTop: -25,
+    flex: 2,
+    marginTop: -30,
     paddingTop: 15,
     padding: 25,
-    flex: 2,
-    borderRadius: 35,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
     backgroundColor: "white",
+    fontFamily: "Poppins-Regular",
   },
   timeContainer: {
-    marginVertical: 25,
+    marginVertical: 30,
     flexDirection: "row",
+  },
+  icon: {
+    backgroundColor: "#e1ecfa",
+    color: "#121b27",
+    padding: 5,
+    borderRadius: 10,
   },
   infoContainer: {
     marginVertical: 25,
+    fontFamily: "Poppins-Regular",
   },
   button: {
     backgroundColor: "#C0D461",
