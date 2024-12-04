@@ -54,10 +54,8 @@ const Home = (props: Props) => {
   const [searchText, setSearchText] = useState<InputType>("");
   const [searchResults, setSearchResults] = useState<Array<RecipeType>>([]);
 
-  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-  const url =
-    "http://" +
-    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+
   const getData = async (key: string) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);

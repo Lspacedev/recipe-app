@@ -37,12 +37,9 @@ export default function SignIn() {
   const [username, setUsername] = useState<InputType>("");
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  // const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-  const url =
-    "http://" +
-    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+
   const signIn = async () => {
-    console.log({ url });
     const res = await getFetch(`${url}/login`, {
       method: "POST",
       headers: {

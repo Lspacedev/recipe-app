@@ -72,10 +72,8 @@ export default function DetailsScreen() {
   //     recipe: RecipeType;
   //   };
 
-  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-  const url =
-    "http://" +
-    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+
   const getData = async (key) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);

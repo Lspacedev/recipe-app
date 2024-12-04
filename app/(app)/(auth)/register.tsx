@@ -39,10 +39,8 @@ const Register = () => {
   const [email, setEmail] = useState<InputType>("");
   const [password, setPassword] = useState<InputType>("");
   const [role, setRole] = useState<InputType>("ADMIN");
-  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-  const url =
-    "http://" +
-    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+
   //   const handleInput = (type, stateName, value) => {
   //     setErrors((errors) => ({
   //       ...errors,

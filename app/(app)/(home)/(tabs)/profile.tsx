@@ -39,10 +39,8 @@ export default function Profile() {
 
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  //const url = process.env.EXPO_PUBLIC_API_URL ?? "";
-  const url =
-    "http://" +
-    Constants.expoConfig?.hostUri?.split(":").shift()?.concat(":3000");
+  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+
   const getData = async (key: string) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
