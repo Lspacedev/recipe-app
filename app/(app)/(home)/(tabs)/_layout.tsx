@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function TabLayout() {
   const signOut = async () => {
     await AsyncStorage.removeItem("token");
-    router.push("/(app)/(home)/logout");
+    router.push("/(app)/(auth)/sign-in");
   };
   return (
     <Tabs

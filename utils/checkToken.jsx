@@ -1,8 +1,11 @@
 const parseJwt = (token) => {
-  const decode = JSON.parse(atob(token.split(".")[1]));
-  if (decode.exp * 1000 < new Date().getTime()) {
-    localStorage.clear("token");
-    console.log("Time Expired");
+  console.log({ token });
+  if (token) {
+    const decode = JSON.parse(atob(token.split(".")[1]));
+    if (decode.exp * 1000 < new Date().getTime()) {
+      localStorage.clear("token");
+      console.log("Time Expired");
+    }
   }
 };
 

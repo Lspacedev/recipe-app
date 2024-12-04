@@ -42,6 +42,8 @@ type RecipeType = {
 };
 
 const Home = (props: Props) => {
+  console.log("index");
+
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,

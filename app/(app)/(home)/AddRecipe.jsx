@@ -78,9 +78,10 @@ const AddRecipe = () => {
     formData.append("prepTime", prepTime);
     formData.append("cookingTime", cookingTime);
     formData.append("servings", servings);
+    const fname = filename.slice(0, filename.lastIndexOf("."));
 
     formData.append("image", {
-      name: filename,
+      name: fname,
       type: `image/${fileType}`,
       uri: Platform.OS === "ios" ? uri.replace("file://", "") : uri,
     });

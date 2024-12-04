@@ -27,6 +27,8 @@ type InputType =
   | Number
   | NativeSyntheticEvent<TextInputChangeEventData>;
 export default function SignIn() {
+  console.log("sign in");
+
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -61,6 +63,7 @@ export default function SignIn() {
     }
     // router.push("/home" as Href);
   };
+
   if (!fontsLoaded) {
     return <View></View>;
   } else {

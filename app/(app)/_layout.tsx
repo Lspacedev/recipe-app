@@ -27,11 +27,17 @@ export default function Root() {
   if (loading) {
     return <Text>Loading...</Text>;
   }
-  if (!token && !authRoutes.includes(pathname)) {
-    return <Redirect href={{ pathname: "/sign-in" }} />;
-  }
+
+  // if (!token && !authRoutes.includes(pathname)) {
+  //   console.log("true", token, pathname);
+  //   return <Redirect href={{ pathname: "/sign-in" }} />;
+  // }
   if (token && authRoutes.includes(pathname)) {
+    console.log("false", token, pathname);
+
     return <Redirect href={{ pathname: "/(app)/(home)" }} />;
+  } else {
+    console.log("redirect to sign in");
   }
   return (
     <Stack>
