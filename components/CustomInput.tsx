@@ -14,51 +14,58 @@ type InputType = string | NativeSyntheticEvent<TextInputChangeEventData>;
 
 type CustomInputProps = TextInputProps & {
   name: string;
+  placeholder: string;
   error: string | Array<string>;
-  onChange: (value: InputType) => void;
+  handleChange: (value: string) => void;
+  value?: string | undefined;
 };
 
 const CustomInput: React.FC<CustomInputProps> = ({
   name,
-  onChange,
+  placeholder,
+  handleChange,
   error,
   onBlur,
+  value,
 }) => {
   const [showPassword, setShowPassword] = useState<Boolean>(false);
-
   return (
     <View style={styles.inputContainer}>
+      <Text style={styles.label}>{name}</Text>
       {name === "Password" || name === "Confirm Password" ? (
         <TextInput
           secureTextEntry={!showPassword}
           style={[styles.input]}
-          placeholder={name}
+          placeholder={placeholder}
           placeholderTextColor={"#717171"}
-          onChangeText={(text) => onChange(text)}
+          onChangeText={(text) => handleChange(text)}
           onBlur={onBlur}
+        />
+      ) : name === "Instructions" ? (
+        <TextInput
+          multiline={true}
+          style={styles.input}
+          textAlignVertical="top"
+          placeholder={placeholder}
+          placeholderTextColor={"#717171"}
+          onChangeText={(text) => handleChange(text)}
+          onBlur={onBlur}
+          value={value}
         />
       ) : (
         <TextInput
           style={[styles.input]}
-          placeholder={name}
+          placeholder={placeholder}
           placeholderTextColor={"#717171"}
-          onChangeText={(text) => onChange(text)}
+          onChangeText={(text) => handleChange(text)}
           onBlur={onBlur}
+          value={value}
         />
       )}
 
-      {typeof error === "string" && error !== "" && (
+      {typeof error === "string" && error !== null && (
         <Text style={styles.error}>{error}</Text>
       )}
-      {typeof error === "object" &&
-        error.length > 0 &&
-        error.map((error: string, i: number) => {
-          return (
-            <Text key={i} style={styles.error}>
-              {error}
-            </Text>
-          );
-        })}
     </View>
   );
 };
@@ -67,9 +74,11 @@ export default CustomInput;
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 5,
+    marginVertical: 5,
   },
   label: {
-    color: "#BDBDBD",
+    color: "gray",
+    fontWeight: "600",
   },
   input: {
     borderRadius: 5,
@@ -78,9 +87,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: "#BDBDBD",
     borderWidth: 0.8,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
   },
   error: {
     color: "#B9382C",

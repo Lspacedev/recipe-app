@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Href, Link, router } from "expo-router";
 import {
   ScrollView,
@@ -7,11 +7,9 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  Alert,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CustomInput from "@/components/CustomInput";
 import userFetch from "@/hooks/userFetch";
@@ -21,54 +19,56 @@ import {
   Poppins_400Regular,
   Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
-import Constants from "expo-constants";
+import { validateInput } from "@/utils/validateInput";
 
-type Props = {};
-type InputType =
-  | string
-  | Number
-  | NativeSyntheticEvent<TextInputChangeEventData>;
 const Register = () => {
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
   });
-  const { getFetch } = userFetch();
+  const { loading, getFetch } = userFetch();
 
-  const [username, setUsername] = useState<InputType>("");
-  const [email, setEmail] = useState<InputType>("");
-  const [password, setPassword] = useState<InputType>("");
-  const [role, setRole] = useState<InputType>("ADMIN");
-  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("ADMIN");
+  const url = `${process.env.EXPO_PUBLIC_API_URL}`;
+  const [errors, setErrors] = useState({
+    username: { error: "" },
+    email: { error: "" },
+    password: { error: "" },
+  });
 
-  //   const handleInput = (type, stateName, value) => {
-  //     setErrors((errors) => ({
-  //       ...errors,
-  //       [stateName]: validateInput(type, value),
-  //     }));
-  //   };
+  const handleInput = (type: string, stateName: string, value: string) => {
+    setErrors((errors) => ({
+      ...errors,
+      [stateName]: validateInput(type, value),
+    }));
+  };
   const createUser = async () => {
-    const res = await getFetch(`${url}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password, role }),
-    });
-    console.log({ res });
-    if (res?.status) {
-      router.push("/sign-in" as Href);
-    } else {
-      //const errors = res?.data.errors;
-      console.log(res?.data);
-      // Alert.alert(errors.join(","));
+    try {
+      const res = await getFetch(`${url}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password, role }),
+      });
+      console.log({ res });
+      if (res?.status) {
+        router.push("/sign-in" as Href);
+      } else {
+        console.log(res?.data);
+      }
+    } catch (err) {
+      console.log("Error", err);
     }
   };
   if (!fontsLoaded) {
     return <View></View>;
   } else {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
         <View
           style={{
             flexDirection: "row",
@@ -83,26 +83,32 @@ const Register = () => {
           />
           <Text style={styles.logo}>CookBook</Text>
         </View>
-        <ScrollView contentContainerStyle={styles.scrollView}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="always"
+        >
           <Text style={styles.formTitle}>Register</Text>
           <CustomInput
             name={"Username"}
-            onChange={setUsername}
-            //onBlur={() => handleInput("string", "userName", userName)}
-            error=""
+            placeholder="Username"
+            handleChange={(text: string) => setUsername(text)}
+            onBlur={() => handleInput("string", "username", username)}
+            error={errors?.username?.error}
           />
           <CustomInput
             name={"Email"}
-            onChange={setEmail}
-            //onBlur={() => handleInput("string", "userName", userName)}
-            error=""
+            placeholder="Email"
+            handleChange={(text: string) => setEmail(text)}
+            onBlur={() => handleInput("email", "email", email)}
+            error={errors?.email?.error}
           />
 
           <CustomInput
             name={"Password"}
-            onChange={setPassword}
-            //onBlur={() => handleInput("password", "password", password)}
-            error=""
+            placeholder="Password"
+            handleChange={(text: string) => setPassword(text)}
+            // onBlur={() => handleInput("password", "password", password)}
+            error={""}
           />
 
           <View style={styles.signInSection}>
@@ -114,26 +120,36 @@ const Register = () => {
             </Pressable>
           </View>
 
-          <Pressable
+          <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              createUser();
-            }}
+            onPress={
+              !loading
+                ? () => {
+                    createUser();
+                  }
+                : () => {
+                    console.log("tap");
+                  }
+            }
           >
-            <Text style={styles.buttonText}>Submit</Text>
-          </Pressable>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text style={styles.buttonText}>Submit</Text>
+            )}
+          </TouchableOpacity>
         </ScrollView>
         {/* </KeyboardAvoidingView> */}
 
         <StatusBar backgroundColor="#0C0910" />
-      </SafeAreaView>
+      </ScrollView>
     );
   }
 };
 export default Register;
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#385747",
+    backgroundColor: "#1a2821",
     flex: 1,
     paddingHorizontal: 25,
   },

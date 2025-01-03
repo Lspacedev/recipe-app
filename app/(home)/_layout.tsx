@@ -2,10 +2,10 @@ import { Redirect, Stack, usePathname } from "expo-router";
 import { Text } from "react-native";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import parseJWT from "@/utils/checkToken";
+
 type TokenType = string | null;
 export default function Root() {
-  const pathname = usePathname();
-  const authRoutes = ["/sign-in", "/register"];
   const [token, setToken] = useState<TokenType>("");
   const [loading, setLoading] = useState<boolean>(false);
   const getData = async (key: string) => {
@@ -20,29 +20,36 @@ export default function Root() {
     (async () => {
       setLoading(true);
       const jsonValue = await getData("token");
+      parseJWT(jsonValue);
       setLoading(false);
       setToken(jsonValue);
     })();
   }, []);
+
   if (loading) {
     return <Text>Loading...</Text>;
   }
 
-  // if (!token && !authRoutes.includes(pathname)) {
-  //   console.log("true", token, pathname);
-  //   return <Redirect href={{ pathname: "/sign-in" }} />;
-  // }
-  if (token && authRoutes.includes(pathname)) {
-    console.log("false", token, pathname);
-
-    return <Redirect href={{ pathname: "/(app)/(home)" }} />;
-  } else {
-    console.log("redirect to sign in");
+  if (!token) {
+    console.log({ token });
+    return <Redirect href={{ pathname: "/(auth)/sign-in" }} />;
   }
+
   return (
     <Stack>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(home)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="AddRecipe"
+        options={{
+          headerShown: true,
+          headerTitle: "Add recipe",
+          headerTintColor: "whitesmoke",
+          headerStyle: {
+            backgroundColor: "#1a2821",
+          },
+        }}
+      />
     </Stack>
   );
 }

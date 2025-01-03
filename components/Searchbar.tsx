@@ -49,5 +49,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#BDBDBD",
     borderWidth: 0.8,
+    backgroundColor: "#f2f2f0",
   },
 });

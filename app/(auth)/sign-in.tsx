@@ -8,6 +8,8 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   Alert,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import CustomInput from "@/components/CustomInput";
 import { StatusBar } from "expo-status-bar";
@@ -20,52 +22,51 @@ import {
   Poppins_400Regular,
   Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
-import Constants from "expo-constants";
 
 type InputType =
   | string
   | Number
   | NativeSyntheticEvent<TextInputChangeEventData>;
 export default function SignIn() {
-  console.log("sign in");
-
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
   });
-  const { getFetch } = userFetch();
+  const { loading, getFetch } = userFetch();
   const [username, setUsername] = useState<InputType>("");
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  const url = process.env.EXPO_PUBLIC_API_URL ?? "";
+  const url = `${process.env.EXPO_PUBLIC_API_URL}`;
 
   const signIn = async () => {
-    const res = await getFetch(`${url}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    console.log({ res });
-    if (res?.status) {
-      Alert.alert("Login success");
-      await AsyncStorage.setItem("token", JSON.stringify(res.data.token));
-      router.push("/(app)/(home)" as Href);
-    } else {
-      const errors = res?.data.errors || res?.data.error;
-      console.log({ errors });
-      //console.log(data?.errors);
-      Alert.alert(errors);
+    try {
+      const res = await getFetch(`${url}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res?.status) {
+        Alert.alert("Login success");
+        await AsyncStorage.setItem("token", JSON.stringify(res.data.token));
+        router.push({ pathname: "/(home)/(tabs)" });
+      } else {
+        const errors = res?.data.errors || res?.data.error;
+        console.log(errors);
+        Alert.alert(errors);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    // router.push("/home" as Href);
   };
 
   if (!fontsLoaded) {
     return <View></View>;
   } else {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
         <View
           style={{
             flexDirection: "row",
@@ -80,11 +81,15 @@ export default function SignIn() {
           />
           <Text style={styles.logo}>CookBook</Text>
         </View>
-        <ScrollView contentContainerStyle={styles.scrollView}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="always"
+        >
           <Text style={styles.formTitle}>Sign in</Text>
           <CustomInput
             name={"Username"}
-            onChange={(text) => {
+            placeholder="Username"
+            handleChange={(text: string) => {
               setUsername(text);
             }}
             //onBlur={() => handleInput("string", "username", username)}
@@ -92,25 +97,32 @@ export default function SignIn() {
           />
           <CustomInput
             name={"Password"}
-            onChange={(text) => {
+            placeholder="Password"
+            handleChange={(text: string) => {
               setPassword(text);
             }}
             //onBlur={() => handleInput("password", "password", password)}
             error=""
           />
 
-          <Pressable style={styles.button}>
-            <Text
-              style={styles.buttonText}
-              onPress={() => {
-                signIn();
-                // Navigate after signing in. You may want to tweak this to ensure sign-in is
-                // successful before navigating.
-              }}
-            >
-              Sign In
-            </Text>
-          </Pressable>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={
+              !loading
+                ? () => {
+                    signIn();
+                  }
+                : () => {
+                    console.log("tap");
+                  }
+            }
+          >
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text style={styles.buttonText}>Sign In</Text>
+            )}
+          </TouchableOpacity>
           <View>
             <Text style={{ color: "#BDBDBD" }}>Don't have an account?</Text>
             <Pressable>
@@ -127,13 +139,13 @@ export default function SignIn() {
         </ScrollView>
 
         <StatusBar backgroundColor="#010709" />
-      </View>
+      </ScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#385747",
+    backgroundColor: "#1a2821",
     flex: 1,
     paddingHorizontal: 25,
     fontFamily: "Poppins_400Regular",

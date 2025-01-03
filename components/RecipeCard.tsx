@@ -34,10 +34,15 @@ const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
         pathname: "../[id]",
         params: { id: recipe._id },
       }}
+      style={{ marginVertical: 15 }}
     >
       <View style={styles.container}>
         <View style={styles.imgContainer}>
-          <Image source={{ uri: recipe.imageUrl }} style={styles.img} />
+          <Image
+            source={{ uri: recipe.imageUrl }}
+            resizeMode="cover"
+            style={styles.img}
+          />
         </View>
         <View style={styles.recipeText}>
           <Text style={{ color: "#121b27" }}>{recipe.name}</Text>
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
     width: (Dimensions.get("window").width - 60) / 2,
     height: 200,
     borderRadius: 25,
-    marginTop: 15,
+    marginVertical: 15,
   },
   imgContainer: {
     width: (Dimensions.get("window").width - 60) / 2,

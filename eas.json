@@ -7,11 +7,17 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "channel": "development"
+      "channel": "development",
+      "env": {
+        "API_URL": "API_URL"
+      }
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "API_URL": "API_URL"
+      }
     },
     "production": {
       "autoIncrement": true,

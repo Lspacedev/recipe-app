@@ -1,42 +1,47 @@
 import { Tabs, router } from "expo-router";
-import { Text } from "react-native";
-import { useState, useEffect } from "react";
+import { Text, TouchableOpacity } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TabLayout() {
   const signOut = async () => {
     await AsyncStorage.removeItem("token");
-    router.push("/(app)/(auth)/sign-in");
+    router.push({ pathname: "/(auth)/sign-in" });
   };
   return (
     <Tabs
-      screenOptions={{
+      screenOptions={({ route }) => ({
         tabBarStyle: {
-          borderTopWidth: 0,
-          borderBottomWidth: 0,
+          borderBottomWidth: 5,
+          borderBottomColor: "#edece9",
         },
-        tabBarLabelStyle: {
-          color: "#BDBDBD",
+        tabBarLabel: ({ focused }) => {
+          return (
+            <Text style={{ fontSize: 13, color: focused ? "red" : "gray" }}>
+              {route.name}
+            </Text>
+          );
         },
+
         tabBarActiveTintColor: "#C0D461",
         tabBarInactiveTintColor: "#13211a",
-        tabBarActiveBackgroundColor: "white",
-        tabBarInactiveBackgroundColor: "white",
-      }}
+        tabBarActiveBackgroundColor: "#f2f2f0",
+        tabBarInactiveBackgroundColor: "#f2f2f0",
+      })}
     >
       <Tabs.Screen
         name="index"
         options={{
           headerShown: false,
-          tabBarLabel: "",
+          tabBarLabel: "Home",
+
           tabBarIcon: ({ color }) => {
             return <Entypo name="home" size={24} color={color} />;
           },
         }}
       />
-      {/* <Tabs.Screen name="recordings" options={{ headerShown: false }} /> */}
 
       <Tabs.Screen
         name="profile"
@@ -44,10 +49,10 @@ export default function TabLayout() {
           headerTitle: "Profile",
           headerTintColor: "whitesmoke",
           headerStyle: {
-            backgroundColor: "#385747",
+            backgroundColor: "#1a2821",
           },
-          tabBarLabel: "",
 
+          tabBarLabel: "Profile",
           tabBarIcon: ({ color }) => {
             return (
               <Ionicons name="person-circle-sharp" size={24} color={color} />
@@ -55,14 +60,14 @@ export default function TabLayout() {
           },
 
           headerRight: () => (
-            <Text
-              style={{ color: "whitesmoke", paddingHorizontal: 15 }}
-              onPress={() => {
-                signOut();
-              }}
-            >
-              Sign Out
-            </Text>
+            <TouchableOpacity onPress={signOut}>
+              <MaterialIcons
+                name="logout"
+                size={24}
+                color="whitesmoke"
+                style={{ paddingHorizontal: 15 }}
+              />
+            </TouchableOpacity>
           ),
         }}
       />

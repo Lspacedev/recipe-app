@@ -6,17 +6,11 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Image,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
   Modal,
-  Alert,
-  ActivityIndicator,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 const Header = () => {
@@ -63,13 +57,13 @@ const Header = () => {
                   <EvilIcons name="close" size={24} color="black" />
                 </Text>
 
-                <Pressable
+                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => deleteRecipe()}
                 >
                   <MaterialIcons name="delete" size={24} />
                   <Text>Delete</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
           </View>

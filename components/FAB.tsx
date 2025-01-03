@@ -6,7 +6,6 @@ type Props = {};
 
 const FAB = (props: Props) => {
   return (
-    // <Link href="/(home)/AddRecipe">
     <Pressable
       onPress={() => router.push("/(home)/AddRecipe")}
       style={{
@@ -23,7 +22,6 @@ const FAB = (props: Props) => {
     >
       <FontAwesome6 name="add" size={24} color="black" />
     </Pressable>
-    // </Link>
   );
 };
 export default FAB;
