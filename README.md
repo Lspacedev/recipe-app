@@ -1,6 +1,6 @@
 # React Native + MongoDb + Express App
 
-React hotel booking/management app using firebase as storage and database.
+React Native Recipe app using MongoDB database.
 
 ## Installation
 
