@@ -29,6 +29,8 @@ import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import parseJWT from "@/utils/checkToken";
+import Constants from "expo-constants";
+
 import {
   useFonts,
   Poppins_400Regular,
@@ -70,7 +72,7 @@ export default function DetailsScreen() {
       setServings(recipe.servings.toString());
     }
   }, [loading, recipe]);
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/api`;
+  const url = `${Constants.expoConfig?.extra?.API_URL}/api`;
 
   const getData = async (key) => {
     try {

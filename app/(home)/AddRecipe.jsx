@@ -15,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import parseJWT from "@/utils/checkToken";
 import { Platform } from "react-native";
 import { validateInput } from "@/utils/validateInput";
+import Constants from "expo-constants";
 
 const FormData = global.FormData;
 
@@ -34,7 +35,7 @@ const AddRecipe = () => {
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/api`;
+  const url = `${Constants.expoConfig?.extra?.API_URL}/api`;
   const getData = async (key) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);

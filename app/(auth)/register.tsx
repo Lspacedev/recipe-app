@@ -20,6 +20,7 @@ import {
   Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
 import { validateInput } from "@/utils/validateInput";
+import Constants from "expo-constants";
 
 const Register = () => {
   let [fontsLoaded] = useFonts({
@@ -32,7 +33,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("ADMIN");
-  const url = `${process.env.EXPO_PUBLIC_API_URL}`;
+  const url = Constants.expoConfig?.extra?.API_URL;
   const [errors, setErrors] = useState({
     username: { error: "" },
     email: { error: "" },

@@ -28,6 +28,7 @@ type UserType = {
   role: string;
   createdAt: string;
 };
+import Constants from "expo-constants";
 
 export default function Profile() {
   const { loading, getFetch } = userFetch();
@@ -41,7 +42,7 @@ export default function Profile() {
 
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  const url = `${process.env.EXPO_PUBLIC_API_URL}`;
+  const url = Constants.expoConfig?.extra?.API_URL;
 
   useFocusEffect(
     useCallback(() => {

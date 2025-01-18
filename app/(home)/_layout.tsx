@@ -31,7 +31,6 @@ export default function Root() {
   }
 
   if (!token) {
-    console.log({ token });
     return <Redirect href={{ pathname: "/(auth)/sign-in" }} />;
   }
 

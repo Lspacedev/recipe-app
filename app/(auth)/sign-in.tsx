@@ -22,7 +22,7 @@ import {
   Poppins_400Regular,
   Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
-
+import Constants from "expo-constants";
 type InputType =
   | string
   | Number
@@ -36,8 +36,7 @@ export default function SignIn() {
   const [username, setUsername] = useState<InputType>("");
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
-  const url = `${process.env.EXPO_PUBLIC_API_URL}`;
-
+  const url = Constants.expoConfig?.extra?.API_URL;
   const signIn = async () => {
     try {
       const res = await getFetch(`${url}/login`, {

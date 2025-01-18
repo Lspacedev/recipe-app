@@ -27,6 +27,8 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
+import Constants from "expo-constants";
+
 type Props = {};
 type TokenType = string | null;
 type InputType = string | NativeSyntheticEvent<TextInputChangeEventData>;
@@ -54,7 +56,7 @@ const Home = (props: Props) => {
   const [searchText, setSearchText] = useState<InputType>("");
   const [searchResults, setSearchResults] = useState<Array<RecipeType>>([]);
   const [notFound, setNotFound] = useState(false);
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/api`;
+  const url = `${Constants.expoConfig?.extra?.API_URL}/api`;
   useFocusEffect(
     useCallback(() => {
       getRecipes();
