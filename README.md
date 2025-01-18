@@ -1,6 +1,6 @@
 # React Native + MongoDb + Express App
 
-React hotel booking/management app using firebase as storage and database.
+React Native Recipe app using MongoDB database.
 
 ## Installation
 
@@ -48,6 +48,10 @@ Api Endpoints:
 ## Credits:
 
 ```python
+Photo by ROMAN ODINTSOV: https://www.pexels.com/photo/vegetable-salad-served-on-table-with-beef-steak-in-restaurant-4551832/
+Photo by Yaroslav Shuraev: https://www.pexels.com/photo/fresh-vegetables-and-fruits-on-the-table-8844888/
+Photo by Yaroslav Shuraev: https://www.pexels.com/photo/top-view-of-a-cookbook-and-variety-of-healthy-foods-on-a-table-8851929/
+Photo by Polina Kovaleva: https://www.pexels.com/photo/assorted-vegetables-on-chopping-board-on-wooden-surface-5645089/
 
 ```
 
