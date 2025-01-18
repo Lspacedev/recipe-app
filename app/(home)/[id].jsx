@@ -137,7 +137,7 @@ export default function DetailsScreen() {
       id
     );
     setOpenMenu(false);
-    router.push("/");
+    router.push({ pathname: "/(home)/(tabs)" });
   };
   if (loading)
     return (
@@ -209,7 +209,7 @@ export default function DetailsScreen() {
             <View style={styles.nav}>
               <Pressable
                 style={styles.backArrow}
-                onPress={() => router.push("./", { relativeToDirectory: true })}
+                onPress={() => router.push({ pathname: "/(home)/(tabs)" })}
               >
                 <AntDesign
                   name="arrowleft"
