@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Feather from "@expo/vector-icons/Feather";
 type RecipeType = {
   _id: string;
   name: string;
@@ -28,26 +29,55 @@ type RecipeProps = {
 
 const RecipeCard: React.FC<RecipeProps> = ({ recipe }) => {
   return (
-    <View>
-      <Image source={{ uri: recipe.imageUrl }} />
-      <View>
-        <Text></Text>
+    <Link
+      href={{
+        pathname: "../[id]",
+        params: { id: recipe._id },
+      }}
+      style={{ marginVertical: 15 }}
+    >
+      <View style={styles.container}>
+        <View style={styles.imgContainer}>
+          <Image
+            source={{ uri: recipe.imageUrl }}
+            resizeMode="cover"
+            style={styles.img}
+          />
+        </View>
+        <View style={styles.recipeText}>
+          <Text style={{ color: "#121b27" }}>{recipe.name}</Text>
+        </View>
       </View>
-      <View>
-        <Link href="/">
-          <Pressable>
-            <Text>View More</Text>
-          </Pressable>
-        </Link>
-      </View>
-    </View>
+    </Link>
   );
 };
 export default RecipeCard;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: (Dimensions.get("window").width - 60) / 2,
     height: 200,
+    borderRadius: 25,
+    marginVertical: 15,
+  },
+  imgContainer: {
+    width: (Dimensions.get("window").width - 60) / 2,
+    height: 180,
+    borderRadius: 25,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  img: {
+    flex: 1,
+    borderRadius: 25,
+  },
+  recipeText: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    fontWeight: 600,
   },
 });
