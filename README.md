@@ -2,6 +2,10 @@
 
 React Native, MongoDb, Express, recipe app, where users can create and manage recipes.
 
+### Recipe App | Backend
+
+[https://github.com/Lspacedev/recipe-app-api/tree/prod](https://github.com/Lspacedev/recipe-app-api/tree/prod)
+
 ## Prerequisites
 
 - React Native
