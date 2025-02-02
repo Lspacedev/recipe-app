@@ -1,4 +1,4 @@
-import { Href, router } from "expo-router";
+import { Href, router, useNavigation, useFocusEffect } from "expo-router";
 import {
   Text,
   View,
@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import CustomInput from "@/components/CustomInput";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import userFetch from "@/hooks/userFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -37,6 +37,22 @@ export default function SignIn() {
   const [password, setPassword] = useState<InputType>("");
   const [error, setError] = useState<InputType>("");
   const url = Constants.expoConfig?.extra?.API_URL;
+  const navigation = useNavigation();
+  useFocusEffect(
+    useCallback(() => {
+      navigation.addListener("beforeRemove", async (e) => {
+        e.preventDefault();
+      });
+    }, [])
+  );
+  const getData = async (key: string) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  };
   const signIn = async () => {
     try {
       const res = await getFetch(`${url}/login`, {
@@ -128,7 +144,7 @@ export default function SignIn() {
               <Text
                 style={{ color: "#F7F0F0", padding: 5 }}
                 onPress={() => {
-                  router.replace("/register" as Href);
+                  router.push({ pathname: "/(auth)/register" });
                 }}
               >
                 Sign up
